@@ -24,3 +24,14 @@ venv/
 
 # Docker / misc
 *.log
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+crash.log
+crash.*.log
+.terraform.lock.hcl
+
