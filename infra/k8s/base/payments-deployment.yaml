@@ -15,11 +15,10 @@ spec:
     spec:
       containers:
         - name: payments
-          image: pedidos-veloz-payments:0.1.0
+          image: ghcr.io/lucas-santos-morais/pedido-veloz-payments:0.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
-
           livenessProbe:
             httpGet:
               path: /health

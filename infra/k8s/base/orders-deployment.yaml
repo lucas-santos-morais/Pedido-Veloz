@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: orders
-          image: pedidos-veloz-orders:0.1.0
+          image: ghcr.io/lucas-santos-morais/pedido-veloz-orders:0.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
