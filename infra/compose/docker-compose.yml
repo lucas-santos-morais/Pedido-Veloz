@@ -1,0 +1,90 @@
+# Docker compose com microserviços, com apenas um comando liga varios containers
+
+
+# Services: Serviços para banco de dados postgres e microserviços de pedidos, pagamentos, inventário e uma porta de entrada (gateway)
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pv_postgres
+    environment:
+      POSTGRES_DB: pedidos
+      POSTGRES_USER: pv_user
+      POSTGRES_PASSWORD: pv_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
+  
+  orders:
+    build:
+      context: ../../apps/orders
+    image: pedidos-veloz-orders:0.1.0
+    container_name: pv_orders
+    ports:
+      - "8001:8000"
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+  payments:
+    build:
+      context: ../../apps/payments
+    image: pedidos-veloz-payments:0.1.0
+    container_name: pv_payments
+    ports:
+      - "8002:8000"
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  inventory:
+    build:
+      context: ../../apps/inventory
+    image: pedidos-veloz-inventory:0.1.0
+    container_name: pv_inventory
+    ports:
+      - "8003:8000"
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+# Gateway: Usado como porta de entrada para os microserviços 
+  gateway:
+    image: nginx:alpine
+    container_name: pv_gateway
+    ports:
+      - "8080:80"
+    volumes:
+      - ../../apps/gateway/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - orders
+      - payments 
+      - inventory
+    networks:
+      - app-net
+
+# Volume: Usado para persistência dos dados
+volumes:
+  pgdata:
+
+# App-net: Rede para comunicação entre os serviços
+networks:
+  app-net:
+    driver: bridge
