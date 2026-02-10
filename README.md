@@ -151,6 +151,11 @@ Apenas um esqueleto, repositório ECR para microserviços.
 - terraform init
 - terraform validate
 
+## Link para explicação do projeto no  <img width="20" height="20" alt="image" src="https://github.com/user-attachments/assets/05f2c755-f126-4a68-931b-6559aedcf8be" /> Youtube
+
+https://youtu.be/51q-shV_CIA
+
 ### Licença 
+
 
 Este projeto está licenciado sob a Licença MIT — veja o arquivo [LICENSE](LICENSE) para detalhes.
